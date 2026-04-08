@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Timetable & Schedule Management System</title>
+    <meta name="description" content="Efficient academic schedule management system with conflict detection.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Decorative Background Shapes -->
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
+    <div class="bg-shape shape3"></div>
+
+    <!-- Login Screen -->
+    <div id="loginView" class="view active">
+        <div class="login-container">
+            <div class="login-card">
+                <h1>Smart Timetable</h1>
+                <p>Login to manage schedules</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-btn">
+                            <input type="password" id="password" required>
+                            <button type="button" id="togglePassword" class="btn-icon" title="Toggle password visibility">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <div id="loginError" class="error-msg"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appView" class="view">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>Smart Schedule</h2>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-item active" data-target="dashboard">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg></span> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-target="create">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span> Create Timetable
+                </a>
+                <a href="#" class="nav-item auto-sched-btn" data-target="autoschedule" style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(217, 70, 239, 0.2)); border: 1px solid rgba(20, 184, 166, 0.3);">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span> Auto Generate
+                </a>
+                <a href="#" class="nav-item" data-target="schedule">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> Schedule View
+                </a>
+                <a href="#" class="nav-item" data-target="faculty">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span> Faculty Allocation
+                </a>
+                <a href="#" class="nav-item" data-target="manage">
+                    <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span> Manage Classes / Subjects
+                </a>
+            </nav>
+            <div class="logout-container">
+                <button id="logoutBtn" class="btn btn-outline">Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <section id="dashboard" class="page active">
+                <header class="page-header">
+                    <h1>Dashboard Overview</h1>
+                </header>
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="navigateTo('schedule')">
+                        <div class="stat-icon class-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Classes</h3>
+                            <p id="statClasses" class="stat-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('faculty')">
+                        <div class="stat-icon faculty-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Faculty Members</h3>
+                            <p id="statFaculty" class="stat-number">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('manage')">
+                        <div class="stat-icon room-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"></path><path d="M2 20h20"></path><path d="M14 12v.01"></path></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Rooms Available</h3>
+                            <p id="statRooms" class="stat-number">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Create Timetable View -->
+            <section id="create" class="page">
+                <header class="page-header">
+                    <h1>Create Timetable Entry</h1>
+                </header>
+                <div class="card form-card">
+                    <form id="createTimetableForm">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="tt-dept">Department</label>
+                                <select id="tt-dept" required>
+                                    <!-- Dynamic -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-semester">Semester</label>
+                                <select id="tt-semester" required>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-section">Section</label>
+                                <input type="text" id="tt-section" required placeholder="e.g. A">
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-subject">Subject</label>
+                                <select id="tt-subject" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-faculty">Faculty</label>
+                                <select id="tt-faculty" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-room">Room</label>
+                                <select id="tt-room" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-day">Day</label>
+                                <select id="tt-day" required>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tt-time">Time Slot</label>
+                                <select id="tt-time" required>
+                                    <option value="09:00 - 09:50">09:00 - 09:50</option>
+                                    <option value="09:50 - 10:40">09:50 - 10:40</option>
+                                    <option value="11:00 - 11:50">11:00 - 11:50</option>
+                                    <option value="11:50 - 12:40">11:50 - 12:40</option>
+                                    <option value="01:20 - 02:10">01:20 - 02:10</option>
+                                    <option value="02:10 - 03:00">02:10 - 03:00</option>
+                                    <option value="03:20 - 04:10">03:20 - 04:10</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="tt-message" class="message-box"></div>
+                        <button type="submit" class="btn btn-primary submit-btn">Add to Timetable</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Schedule View -->
+            <section id="schedule" class="page">
+                <header class="page-header flex-between">
+                    <h1>Schedule View</h1>
+                    <button id="exportPdfBtn" class="btn btn-success">Export as PDF</button>
+                </header>
+                <div class="filters">
+                    <div class="form-group inline">
+                        <label for="filter-dept">Dept:</label>
+                        <select id="filter-dept">
+                            <option value="">All</option>
+                            <!-- Dynamic -->
+                        </select>
+                    </div>
+                    <div class="form-group inline">
+                        <label for="filter-sec">Section:</label>
+                        <input type="text" id="filter-sec" placeholder="All">
+                    </div>
+                    <button id="applyFiltersBtn" class="btn btn-secondary">Filter</button>
+                    
+                    <div class="view-modes" style="margin-left: auto; display: flex; gap: 8px;">
+                        <button id="viewGridBtn" class="btn btn-secondary active" type="button">Grid</button>
+                        <button id="viewTableBtn" class="btn btn-outline" type="button">Table</button>
+                    </div>
+                </div>
+                
+                <div class="schedule-export-container" id="schedule-export-wrapper">
+                    <div class="schedule-grid" id="scheduleGrid">
+                        <!-- Grid dynamically generated -->
+                    </div>
+                    <div class="table-responsive" id="scheduleTableContainer" style="display: none;">
+                        <table class="data-table" id="scheduleTable">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Time Slot</th>
+                                    <th>Subject</th>
+                                    <th>Faculty</th>
+                                    <th>Room</th>
+                                    <th>Section</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Distributed logically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Faculty Allocation View -->
+            <section id="faculty" class="page">
+                <header class="page-header">
+                    <h1>Faculty Allocation</h1>
+                </header>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Add Faculty</h3>
+                        <form id="addFacultyForm">
+                            <div class="form-group">
+                                <label for="fac-name">Name</label>
+                                <input type="text" id="fac-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-dept">Department</label>
+                                <select id="fac-dept" required></select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Faculty</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Faculty Workload</h3>
+                        <div class="table-responsive">
+                            <table id="facultyTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Dept</th>
+                                        <th>Workload (Classes)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Subjects/Rooms View -->
+            <section id="manage" class="page">
+                <header class="page-header">
+                    <h1>Manage Classes / Subjects</h1>
+                </header>
+                
+                <div class="grid-2">
+                    <!-- Departments Management -->
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <h3>Add Department</h3>
+                        <form id="addDeptForm">
+                            <div class="form-group">
+                                <label for="dept-name">Department Name</label>
+                                <input type="text" id="dept-name" required placeholder="e.g. Electrical Engineering">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Department</button>
+                        </form>
+                        
+                        <h3 style="margin-top:24px;">Existing Departments</h3>
+                        <div class="table-responsive">
+                            <table id="deptTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Department Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Classes / Subjects Management -->
+                    <div class="card">
+                        <h3>Add Class / Subject</h3>
+                        <form id="addSubjectForm">
+                            <div class="form-group">
+                                <label for="sub-name">Subject Name</label>
+                                <input type="text" id="sub-name" required placeholder="e.g. Data Structures">
+                            </div>
+                            <div class="form-group">
+                                <label for="sub-code">Course Code</label>
+                                <input type="text" id="sub-code" required placeholder="e.g. CS201">
+                            </div>
+                            <div class="form-group">
+                                <label for="sub-dept">Department</label>
+                                <select id="sub-dept" required></select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Class</button>
+                        </form>
+                        
+                        <div class="flex-between" style="margin-top:24px; align-items: center; margin-bottom: 12px;">
+                            <h3 style="margin: 0;">Existing Classes</h3>
+                            <select id="filter-classes-dept" class="form-control" style="width: auto; padding: 4px 8px;">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="subjectTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Code</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Rooms Management -->
+                    <div class="card">
+                        <h3>Add Room</h3>
+                        <form id="addRoomForm">
+                            <div class="form-group">
+                                <label for="room-num">Room Number</label>
+                                <input type="text" id="room-num" required placeholder="e.g. Room 101">
+                            </div>
+                            <div class="form-group">
+                                <label for="room-cap">Capacity</label>
+                                <input type="number" id="room-cap" required value="40">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Room</button>
+                        </form>
+                        
+                        <h3 style="margin-top:24px;">Existing Rooms</h3>
+                        <div class="table-responsive">
+                            <table id="roomTable" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Capacity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Auto Schedule View (Unique UI) -->
+            <section id="autoschedule" class="page">
+                <header class="page-header" style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="font-size: 2.5rem; background: -webkit-linear-gradient(#14b8a6, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Magic Auto Scheduler</h1>
+                    <p style="color: rgba(255,255,255,0.7); max-width: 600px; margin: 0.5rem auto;">Create an entire schedule without conflicts at the click of a button.</p>
+                </header>
+                
+                <div class="card" style="border: 2px solid rgba(20, 184, 166, 0.3); background: rgba(0,0,0,0.4); box-shadow: 0 0 30px rgba(217, 70, 239, 0.1);">
+                    <form id="autoScheduleForm">
+                        <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div class="form-group">
+                                <label for="auto-dept" style="color: #5eead4;">1. Department</label>
+                                <select id="auto-dept" required style="border-bottom: 2px solid #14b8a6;"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="auto-sem" style="color: #5eead4;">2. Semester</label>
+                                <select id="auto-sem" required style="border-bottom: 2px solid #14b8a6;">
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="auto-sec" style="color: #5eead4;">3. Section</label>
+                                <input type="text" id="auto-sec" required placeholder="e.g. A" style="border-bottom: 2px solid #14b8a6;">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Define Requirements</h3>
+                            <button type="button" id="autoAddReqBtn" class="btn" style="background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.4);">+ Add Subject</button>
+                        </div>
+                        
+                        <div id="autoRequirementsContainer" style="display:flex; flex-direction: column; gap: 16px; min-height: 100px;">
+                            <!-- Dynamic rows appended here -->
+                        </div>
+
+                        <div id="auto-message" class="message-box" style="margin-top: 2rem;"></div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1rem; font-size: 1.1rem; background: linear-gradient(to right, #14b8a6, #d946ef); border: none; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">
+                            Generate Time Table 🚀
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Html2Pdf for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
